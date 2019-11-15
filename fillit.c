@@ -6,7 +6,7 @@
 /*   By: bkonjuha <bkonjuha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/13 20:56:54 by bkonjuha          #+#    #+#             */
-/*   Updated: 2019/11/14 09:10:42 by bkonjuha         ###   ########.fr       */
+/*   Updated: 2019/11/15 11:13:08 by bkonjuha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,29 +31,31 @@
 **
 */
 
-int	validate_square(char *str, int len)
+int	validate_square(char *str, size_t len)
 {
-	int count; //Counting the amount of hastags
-	int num; //Counting the amount of tetrinoms
-	int i;
+	size_t count; //Counting the amount of hastags
+	size_t num; //Counting the amount of tetrinoms
+	size_t i;
+	size_t limit;
 
 	count = 0;
 	num = 0;
 	i = - 1;
-	printf("ignore this\n");
+	limit = 19;
 	while (str[++i] != '\0')
 	{
 		if (str[i] != '#' && str[i] != '.' && str[i] != '\n') //checking for other characters
 			return(-1);
 		if (str[i] == '#')
 			count++;
-		if (i % 19 == 0 && str[i] == '\n' && count % 4 == 0)//boxes are 20 characters long meaning at index 19 should be a /n and ther should have been 4x '#'
+		if (i == limit && str[i] == '\n' && count % 4 == 0)//boxes are 20 characters long meaning at index 19 should be a /n and ther should have been 4x '#'
 		{
-			str += 2; //with this we jump over the separator to index 21 from index 19.
+			limit += 21;
 			num++;
+			if (i < len - 1)
+				i++;
 		}
 	}
-	printf("len is %d, num is %d, count is %d\n", len, num, count);
 	if (num != ((len + 1) / 21) || ((len + 1) % 21) != 0) //for every tetrinome there should be 21 characters (except the last one) len + 1 should also be either 21, 42, 63.. and so on.
 		return (-1);
 	return (0);
@@ -82,7 +84,7 @@ int		errno(int n)
 	return (-1);
 }
 
-int		main(int ac, char **av)
+char	*please_read(char *s)
 {
 	int fd;
 	int ret;
@@ -90,24 +92,43 @@ int		main(int ac, char **av)
 	char buff[BUFF_SIZE + 1];
 	char *str2;
 
-	str2 = ft_strnew(1);
+	fd = open(s, O_RDONLY);
+	while ((ret = read(fd, buff, BUFF_SIZE))) // same while loop as in gnl
+	{
+		buff[ret] = '\0';
+		if (!str2)
+			str2 = ft_strdup(buff);
+		else
+			temp = ft_strjoin(str2, buff);
+			free(str2);
+			str2 = temp;
+	}
+	return (str2);
+}
+int		main(int ac, char **av)
+{
+	size_t mover;
+	size_t len;
+	char *str;
+
+	str = ft_strnew(1);
 	if (ac != 2)
 		return(errno(ac));
 	else
 	{
-		fd = open(av[1], O_RDONLY);
-		while ((ret = read(fd, buff, BUFF_SIZE))) // same while loop as in gnl
+		str = please_read(av[1]);
+		len = ft_strlen(str);
+		mover = 20;
+		if ((validate_square(str, ft_strlen(str)) == 0))
 		{
-			buff[ret] = '\0';
-			if (!str2)
-				str2 = ft_strdup(buff);
-			else
-				temp = ft_strjoin(str2, buff);
-				free(str2);
-				str2 = temp;
-		}
-		if ((validate_square(str2, ft_strlen(str2)) == 0))
+			while (mover <= len)
+			{
+				if ((checkvalid(str + mover, 21) != 0))
+					return (errno(-1));
+				mover += 21;
+			}
 			ft_putstr("valid square\n");
+		}
 		else
 		{
 			ft_putstr("not a valid square\n");

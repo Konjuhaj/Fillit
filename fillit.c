@@ -6,7 +6,7 @@
 /*   By: bkonjuha <bkonjuha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/13 20:56:54 by bkonjuha          #+#    #+#             */
-/*   Updated: 2019/11/15 14:56:17 by bkonjuha         ###   ########.fr       */
+/*   Updated: 2019/11/16 11:37:13 by bkonjuha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,8 @@ int		main(int ac, char **av)
 					return (errno());
 				mover += 21;
 			}
-			printf("All gravy in the navy \n");
+			printf("VALID TETRINOMES MATE\n");
+			create_map(ft_square(tetris.n_hashes));
 		}
 		else
 			return (errno());

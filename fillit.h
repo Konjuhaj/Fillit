@@ -6,7 +6,7 @@
 /*   By: bkonjuha <bkonjuha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/13 20:55:06 by bkonjuha          #+#    #+#             */
-/*   Updated: 2019/11/15 15:01:09 by bkonjuha         ###   ########.fr       */
+/*   Updated: 2019/11/16 11:53:43 by bkonjuha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,32 @@ typedef struct	s_data
 	char		*str;
 }				t_data;
 
-int		check_shapes(char *str, t_data *tetris);
+typedef struct s_map
+{
+	int			x;
+	int			y;
+	char		**map;
+	char		letter;
+}				t_map;
 
-char	*please_read(int fd);
+int				check_shapes(char *str, t_data *tetris);
 
-int		errno(void);
+char			*please_read(int fd);
 
-int		validate_square(t_data *tetris);
+int				errno(void);
+
+int				validate_square(t_data *tetris);
+
+void			print_map(char **map, int size);
+
+char			**create_map(int size);
+
+int				solve(t_data *tetris, t_map *mappi);
+
+int				place_block(t_data *tetris, t_map *mappi);
+
+void			locate_space(t_map *mappi);
+
+int				ft_square(int num);
 
 #endif

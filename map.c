@@ -1,36 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fillit.h                                           :+:      :+:    :+:   */
+/*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bkonjuha <bkonjuha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/11/13 20:55:06 by bkonjuha          #+#    #+#             */
-/*   Updated: 2019/11/15 15:01:09 by bkonjuha         ###   ########.fr       */
+/*   Created: 2019/11/15 15:11:58 by bkonjuha          #+#    #+#             */
+/*   Updated: 2019/11/16 09:54:56 by bkonjuha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FILLIT_H
-# define FILLIT_H
-# define BUFF_SIZE 32
-# include <fcntl.h>
-# include "libft/libft.h"
+#include "fillit.h"
 
-typedef struct	s_data
+char		**create_map(t_data *tetris, int size)
 {
-	size_t		n_hashes;
-	size_t		n_tetris;
-	size_t		len;
-	size_t		i;
-	char		*str;
-}				t_data;
+	char **map;
+	int i;
 
-int		check_shapes(char *str, t_data *tetris);
+	i = -1;
+	map = (char **)malloc(sizeof(char *) * (size + 1));
+	while (++i < size)
+	{
+		map[i] = (char *)malloc(sizeof(char) * (size + 1));
+		map[i][size] = '\0';
+	}
+	map[size] = NULL;
+	return (map);
+}
 
-char	*please_read(int fd);
+void		print_map(char **map)
+{
+	int i;
 
-int		errno(void);
-
-int		validate_square(t_data *tetris);
-
-#endif
+	i = -1;
+	while(map[++i])
+		ft_putstr(map[i]);
+}

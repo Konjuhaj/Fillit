@@ -3,43 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   solve.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bkonjuha <bkonjuha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bkonjuha <bkonjuha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/16 10:12:09 by bkonjuha          #+#    #+#             */
-/*   Updated: 2019/11/19 12:32:42 by bkonjuha         ###   ########.fr       */
+/*   Updated: 2019/11/19 20:58:27 by bkonjuha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
 #include <stdio.h>
 
-int	locate_space(t_map *mappi)
+int	next_spot(t_map *mappi)
 {
-	int x;
-	int y;
-
-	x = -1;
-	y = -1;
-	while (mappi->map[++y])
+	while (mappi->map[mappi->y])
 	{
-		while (mappi->map[y][++x])
+		mappi->x++;
+		while (mappi->map[mappi->y][mappi->x])
 		{
-			if (mappi->map[y][x] == '.')
+			if (mappi->map[mappi->y][mappi->x] == '.')
 			{
-				mappi->x = x;
-				mappi->y = y;
 				return (1);
 			}
 		}
+		mappi->y++;
+		mappi->x = -1;
 	}
-	return (1);
-}
-
-void	next_line(int i, int x, int y)
-{
-	i++;
-	x = 0;
-	y++;
+	return (0);
 }
 
 void	find_block(char *str, int i)
@@ -52,33 +41,76 @@ int		place_block(char *str, char **map, t_map *mappi)
 	int i;
 	int y;
 	int x;
+	int count;
 
+	count = 1;
 	i = -1;
 	x = mappi->x;
 	y = mappi->y;
 	while (++i < 21)
 	{
-		while (str[i] != '#')
+		while (str[i] == '#')
 		{
-			i++;
-			if (str[i] == '\n')
-				next_line(i, x, y);
+			mappi->map[y][x] = '#';
+			printf("we's here\n");
+			if (str[i + 1] == '#' && map[y][x + 1] == '.')
+			{
+				i++;
+				x++;
+				count++;
+				mappi->map[y][x] = '#';
+			}
+			else if (str[i + 5] == '#' && map[y + 1][x] == '.')
+			{
+				i +=5;
+				y++;
+				count++;
+				mappi->map[y][x] = '#';
+			}
+			else if(str[i - 1] == '#' && map[y][x -1] == '.')
+			{
+				i--;
+				x--;
+				count++;
+				mappi->map[y][x] = '#';
+			}
+			if (count == 4)
+				return(1);
 		}
-
 	}
+	return (0);
 }
 
 int		solve(t_data *tetris, t_map *mappi)
 {
 	int i;
+	unsigned long j;
 
 	i = 1;
-	while (tetris->str)
+	j = 0;
+	while (j <= tetris->len + 1)
 		{
-			if(!(locate_space(mappi->map)));
-				create_map(tetris->n_hashes + i++);
-			place_block(tetris->str, mappi->map, &mappi);
-			tetris->str + 21;
+			printf("we're in the solve loop\n");
+			if(!(place_block(tetris->str + j, mappi->map, mappi)))
+			{
+				printf("we'se here, but whatta do \n");
+				if(!(next_spot(mappi)))
+				{
+					printf("inside of Next spot in Solve loop\n");
+					ft_strdel(mappi->map);
+					create_map(mappi->map_size + i++);
+					j = 0;
+				}
+			}
+			else
+			{
+				print_map(mappi->map);
+				printf("found and placed block\n");
+				next_spot(mappi);
+				printf("is the hickup here \n");
+				j += 21;
+			}
 		}
-	return (0);
+		printf("program says loop is done\n");
+	return (1);
 }

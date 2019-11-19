@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fillit.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bkonjuha <bkonjuha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bkonjuha <bkonjuha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/13 20:55:06 by bkonjuha          #+#    #+#             */
-/*   Updated: 2019/11/19 12:30:21 by bkonjuha         ###   ########.fr       */
+/*   Updated: 2019/11/19 19:48:30 by bkonjuha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ typedef struct	s_data
 
 typedef struct s_map
 {
+	int			map_size;
 	int			x;
 	int			y;
 	char		**map;
@@ -49,8 +50,8 @@ int				solve(t_data *tetris, t_map *mappi);
 
 int				place_block(char *str, char **map, t_map *mappi);
 
-int				ocate_space(t_map *mappi);
+int				locate_space(t_map *mappi);
 
-int				ft_square(int num);
+int				ft_square(int num, t_map *mappi);
 
 #endif

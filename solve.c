@@ -6,74 +6,79 @@
 /*   By: bkonjuha <bkonjuha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/16 10:12:09 by bkonjuha          #+#    #+#             */
-/*   Updated: 2019/11/16 11:45:36 by bkonjuha         ###   ########.fr       */
+/*   Updated: 2019/11/19 12:32:42 by bkonjuha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
+#include <stdio.h>
 
-void	locate_space(t_map *mappi)
+int	locate_space(t_map *mappi)
 {
-	int i;
-	int j;
+	int x;
+	int y;
 
-	i = -1;
-	j = -1;
-	while(mappi->map[++i])
+	x = -1;
+	y = -1;
+	while (mappi->map[++y])
 	{
-		while(mappi->map[i][++j])
+		while (mappi->map[y][++x])
 		{
-			if (mappi->map[i][j] == '.')
-				{
-					mappi->y = i;
-					mappi->x = j;
-				}
+			if (mappi->map[y][x] == '.')
+			{
+				mappi->x = x;
+				mappi->y = y;
+				return (1);
+			}
 		}
-		j = -1;
 	}
+	return (1);
 }
 
-int		place_block(t_data *tetris, t_map *mappi)
+void	next_line(int i, int x, int y)
+{
+	i++;
+	x = 0;
+	y++;
+}
+
+void	find_block(char *str, int i)
+{
+	while (str[i] != '#')
+		i++;
+}
+int		place_block(char *str, char **map, t_map *mappi)
 {
 	int i;
-	int j;
-	int k;
+	int y;
+	int x;
 
-	i = mappi->y;
-	j = mappi->x;
-	k = 0;
-	while(tetris->str[k] != '#')
-		k++;
-	while (mappi->map[i])
+	i = -1;
+	x = mappi->x;
+	y = mappi->y;
+	while (++i < 21)
 	{
-		while (mappi->map[i][j])
+		while (str[i] != '#')
 		{
-			if (mappi->map[i][j] != '.')
-				return (-1);
-			else if(tetris->str[k] != '#')
-				k++;
-			else
-				mappi->map[i][j] = tetris->str[k++];
-			j++;
-			if (tetris->str[k] == '\n')
-				break ;
+			i++;
+			if (str[i] == '\n')
+				next_line(i, x, y);
 		}
-		i++;
+
 	}
-	// print_map(mappi->map);
-	return (0);
 }
 
 int		solve(t_data *tetris, t_map *mappi)
 {
 	int i;
 
-	i = -1;
-	locate_space(mappi);
-	place_block(tetris, mappi);
-		// overlap();
-		// add_block();
-		// 	increase_letter();
-
+	i = 1;
+	while (tetris->str)
+		{
+			if(!(locate_space(mappi->map)));
+				create_map(tetris->n_hashes + i++);
+			place_block(tetris->str, mappi->map, &mappi);
+			tetris->str + 21;
+		}
 	return (0);
 }

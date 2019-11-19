@@ -6,7 +6,7 @@
 /*   By: bkonjuha <bkonjuha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/15 15:11:58 by bkonjuha          #+#    #+#             */
-/*   Updated: 2019/11/16 11:57:08 by bkonjuha         ###   ########.fr       */
+/*   Updated: 2019/11/19 11:36:30 by bkonjuha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,64 +18,39 @@ int ft_square(int num)
 	int i;
 
 	i = 0;
-	while (i * i <= num)
+	while (i * i < num)
 		i++;
-	printf("And the square shall be = %d\n", i);
+	printf("It should be a %dx%d map:\n", i, i);
 	return (i);
 }
 
 char	**create_map(int size)
 {
-	printf("Creating the map\n");
 	char **mappi;
 	int i;
 
 	i = -1;
 	mappi = (char **)malloc(sizeof(char *) * (size + 1));
-	printf("successfull malloc\n");
 	while (++i < size)
 	{
 		mappi[i] = (char *)malloc(sizeof(char) * (size + 1));
 		mappi[i][size] = '\0';
 	}
-	printf("outside loop\n");
+	mappi[size] = NULL;
 	i = -1;
 	while(mappi[++i])
-		ft_memset(mappi, '.', size);
-	printf("memset done\n");
-	mappi[size] = NULL;
-	printf("something s\n");
-	print_map(mappi, size);
-	printf("end of map creationg\n");
+		ft_memset(mappi[i], '.', size);
 	return (mappi);
 }
 
-void	print_map(char **map, int size)
+void	print_map(char **map)
 {
 	int i;
-	int j;
 
-	i = 0;
-	while (i < size)
+	i = -1;
+	while (map[++i])
 	{
-		printf("a\n");
-		j = 0;
-		while (j < size)
-		{
-			printf("b\n");
-			write(1, &map[i][j], size);
-			printf("\nc\n");
-			j++;
-		}
-		write(1, "\n", 1);
-		i++;
+		ft_putstr(map[i]);
+		ft_putchar('\n');
 	}
 }
-// {
-// 	printf("printing called\n");
-// 	int i;
-
-// 	i = -1;
-// 	while(map[++i])
-// 		ft_putstr(map[i]);
-// }

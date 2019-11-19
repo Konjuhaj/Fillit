@@ -6,7 +6,7 @@
 /*   By: bkonjuha <bkonjuha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/13 20:55:06 by bkonjuha          #+#    #+#             */
-/*   Updated: 2019/11/16 11:53:43 by bkonjuha         ###   ########.fr       */
+/*   Updated: 2019/11/19 12:30:21 by bkonjuha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,15 @@ int				errno(void);
 
 int				validate_square(t_data *tetris);
 
-void			print_map(char **map, int size);
+void			print_map(char **map);
 
 char			**create_map(int size);
 
 int				solve(t_data *tetris, t_map *mappi);
 
-int				place_block(t_data *tetris, t_map *mappi);
+int				place_block(char *str, char **map, t_map *mappi);
 
-void			locate_space(t_map *mappi);
+int				ocate_space(t_map *mappi);
 
 int				ft_square(int num);
 

@@ -6,7 +6,7 @@
 /*   By: bkonjuha <bkonjuha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/13 20:56:54 by bkonjuha          #+#    #+#             */
-/*   Updated: 2019/11/16 11:37:13 by bkonjuha         ###   ########.fr       */
+/*   Updated: 2019/11/19 12:08:54 by bkonjuha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ char	*please_read(int fd)
 	char *str;
 	int ret;
 
+	str = ft_strnew(1);
 	while ((ret = read(fd, buff, BUFF_SIZE))) // same while loop as in gnl
 	{
 		buff[ret] = '\0';
@@ -52,8 +53,8 @@ int		main(int ac, char **av)
 	size_t mover;
 	t_data tetris;
 	int fd;
+	t_map mappi;
 
-	tetris.str = ft_strnew(1);
 	if (ac != 2)
 		write(1, "usage: ./fillit file_name\n", 26);
 	else
@@ -70,8 +71,11 @@ int		main(int ac, char **av)
 					return (errno());
 				mover += 21;
 			}
-			printf("VALID TETRINOMES MATE\n");
-			create_map(ft_square(tetris.n_hashes));
+			mover = 0;
+			mappi.map = create_map(ft_square(tetris.n_hashes));
+			while (solve(&tetris, &mappi))
+				create_map(ft_square(tetris.n_hashes + ++mover));
+
 		}
 		else
 			return (errno());

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fillit.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bkonjuha <bkonjuha@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: bkonjuha <bkonjuha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/13 20:56:54 by bkonjuha          #+#    #+#             */
-/*   Updated: 2019/11/19 20:46:53 by bkonjuha         ###   ########.fr       */
+/*   Updated: 2019/11/20 10:13:24 by bkonjuha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,7 @@ int		main(int ac, char **av)
 			mappi.map = create_map(ft_square(tetris.n_hashes, &mappi));
 			mappi.y = 0;
 			mappi.x = 0;
-			while (!(solve(&tetris, &mappi)))
-				create_map(ft_square(tetris.n_hashes + mover++, &mappi));
-
+			solve(&tetris, &mappi);
 		}
 		else
 			return (errno());

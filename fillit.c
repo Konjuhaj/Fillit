@@ -6,7 +6,7 @@
 /*   By: bkonjuha <bkonjuha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/13 20:56:54 by bkonjuha          #+#    #+#             */
-/*   Updated: 2019/11/20 10:13:24 by bkonjuha         ###   ########.fr       */
+/*   Updated: 2019/11/20 11:40:38 by bkonjuha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ int		main(int ac, char **av)
 					return (errno());
 				mover += 21;
 			}
-			mover = 1;
 			mappi.map = create_map(ft_square(tetris.n_hashes, &mappi));
 			mappi.y = 0;
 			mappi.x = 0;

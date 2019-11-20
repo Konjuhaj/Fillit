@@ -6,7 +6,7 @@
 /*   By: bkonjuha <bkonjuha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/16 10:12:09 by bkonjuha          #+#    #+#             */
-/*   Updated: 2019/11/20 11:19:05 by bkonjuha         ###   ########.fr       */
+/*   Updated: 2019/11/20 14:17:43 by bkonjuha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@ int	next_spot(t_map *mappi)
 	while (mappi->map[mappi->y])
 	{
 		mappi->x++;
-		printf("current row is = %d\n", mappi->y);
 		while (mappi->map[mappi->y][mappi->x])
 		{
-			printf("current collumn is = %d\n", mappi->x);
 			if (mappi->map[mappi->y][mappi->x] == '.')
 			{
+				printf("current row is = %d\n", mappi->y);
+				printf("current collumn is = %d\n", mappi->x);
 				return (1);
 			}
 			mappi->x++;
@@ -78,7 +78,7 @@ void	add_block(char *str, t_map *mappi)
 		}
 	}
 }
-int		place_block(char *str, char **map, t_map *mappi)
+int		check_space(char *str, char **map, t_map *mappi)
 {
 	int i;
 	int y;
@@ -93,17 +93,18 @@ int		place_block(char *str, char **map, t_map *mappi)
 	{
 		while (str[i] == '#')
 		{
+			print_map(mappi->map);
 			printf("we's here %d\n", i);
-			if (str[i + 1] == '#' && map[y][x + 1] == '.')
+			if (map[y][x + 1] != '\0' && str[i + 1] == '#' && map[y][x + 1] == '.')
 			{
 				printf("checking right >>>>\n");
 				i++;
 				x++;
 				count++;
 			}
-			else if (str[i + 5] == '#' && map[y + 1][x] == '.')
+			else if (map[y + 1] != NULL && str[i + 5] == '#' && map[y + 1][x] == '.')
 			{
-				printf("checking down vvvv COUNT(%d)\n", count);
+				printf("checking down vvvv COUNT(%d)\n", y);
 				i +=5;
 				y++;
 				count++;
@@ -117,6 +118,7 @@ int		place_block(char *str, char **map, t_map *mappi)
 			}
 			else
 				i++;
+			printf("outside IF statements\n");
 			if (count == 4)
 				return(1);
 		}
@@ -127,15 +129,17 @@ int		place_block(char *str, char **map, t_map *mappi)
 int		solve(t_data *tetris, t_map *mappi)
 {
 	int i;
+	size_t counter;
 	unsigned long j;
 
 	i = 1;
 	j = 0;
+	counter = 0;
 	mappi->letter = 'A';
 	while (j <= tetris->len + 1)
 		{
 			printf("we're in the solve loop\n");
-			if(!(place_block(tetris->str + j, mappi->map, mappi)))
+			if(!(check_space(tetris->str + j, mappi->map, mappi)))
 			{
 				printf("we'se here, but whatta do \n");
 				print_map(mappi->map);
@@ -145,6 +149,7 @@ int		solve(t_data *tetris, t_map *mappi)
 					ft_strdel(mappi->map);
 					create_map(mappi->map_size + i++);
 					j = 0;
+					counter = 0;
 				}
 				else
 					solve(tetris, mappi);
@@ -158,7 +163,10 @@ int		solve(t_data *tetris, t_map *mappi)
 				printf("is the hickup here \n");
 				j += 21;
 				mappi->letter++;
+				counter++;
 			}
+			if (counter == tetris->n_tetris)
+				break ;
 		}
 		printf("program says loop is done\n");
 	return (1);

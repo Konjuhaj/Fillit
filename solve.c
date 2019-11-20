@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   solve.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bkonjuha <bkonjuha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bkonjuha <bkonjuha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/16 10:12:09 by bkonjuha          #+#    #+#             */
-/*   Updated: 2019/11/20 14:17:43 by bkonjuha         ###   ########.fr       */
+/*   Updated: 2019/11/20 22:49:31 by bkonjuha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,40 +78,42 @@ void	add_block(char *str, t_map *mappi)
 		}
 	}
 }
-int		check_space(char *str, char **map, t_map *mappi)
+int		check_space(char *s, char **map, t_map *mappi)
 {
 	int i;
 	int y;
 	int x;
 	int count;
+	char *str;
 
+	str= ft_strdup(s);
 	count = 1;
 	i = -1;
 	x = mappi->x;
 	y = mappi->y;
-	while (++i < 21)
+	while (++i < 20)
 	{
 		while (str[i] == '#')
 		{
 			print_map(mappi->map);
 			printf("we's here %d\n", i);
-			if (map[y][x + 1] != '\0' && str[i + 1] == '#' && map[y][x + 1] == '.')
+			if (x < mappi->map_size && str[i + 1] == '#' && map[y][x + 1] == '.')
 			{
-				printf("checking right >>>>\n");
+				str[i] = 'X';
 				i++;
 				x++;
 				count++;
 			}
 			else if (map[y + 1] != NULL && str[i + 5] == '#' && map[y + 1][x] == '.')
 			{
-				printf("checking down vvvv COUNT(%d)\n", y);
+				str[i] = 'X';
 				i +=5;
 				y++;
 				count++;
 			}
 			else if(str[i - 1] == '#' && map[y][x -1] == '.')
 			{
-				printf("checking left<<<< \n");
+				str[i] = 'X';
 				i--;
 				x--;
 				count++;
@@ -147,7 +149,9 @@ int		solve(t_data *tetris, t_map *mappi)
 				{
 					printf("inside of Next spot in Solve loop\n");
 					ft_strdel(mappi->map);
-					create_map(mappi->map_size + i++);
+					mappi->map = create_map(mappi->map_size + i++);
+					mappi->x = 0;
+					mappi->y = 0;
 					j = 0;
 					counter = 0;
 				}

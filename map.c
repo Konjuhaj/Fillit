@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bkonjuha <bkonjuha@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: bkonjuha <bkonjuha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/15 15:11:58 by bkonjuha          #+#    #+#             */
-/*   Updated: 2019/11/19 19:50:18 by bkonjuha         ###   ########.fr       */
+/*   Updated: 2019/11/21 11:21:45 by bkonjuha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ int ft_square(int num, t_map *mappi)
 	while (i * i < num)
 		i++;
 	mappi->map_size = i;
-	printf("It should be a %dx%d map:\n", i, i);
 	return (i);
 }
 

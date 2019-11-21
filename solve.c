@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   solve.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bkonjuha <bkonjuha@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: bkonjuha <bkonjuha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/16 10:12:09 by bkonjuha          #+#    #+#             */
-/*   Updated: 2019/11/20 22:49:31 by bkonjuha         ###   ########.fr       */
+/*   Updated: 2019/11/21 15:05:19 by bkonjuha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,7 @@ int	next_spot(t_map *mappi)
 		while (mappi->map[mappi->y][mappi->x])
 		{
 			if (mappi->map[mappi->y][mappi->x] == '.')
-			{
-				printf("current row is = %d\n", mappi->y);
-				printf("current collumn is = %d\n", mappi->x);
 				return (1);
-			}
 			mappi->x++;
 		}
 		mappi->y++;
@@ -40,41 +36,43 @@ void	find_block(char *str, int i)
 		i++;
 }
 
-void	add_block(char *str, t_map *mappi)
+void	add_block(char *str, t_map *mappi, char letter)
 {
 	int i;
 	int x;
 	int y;
+	int count;
 
+	count = 1;
 	i = -1;
 	x = mappi->x;
 	y = mappi->y;
-	while (++i < 21)
+	mappi->map[y][x] = letter;
+	while (++i < 20)
 	{
-		printf("Ready steady\n");
 		while (str[i] == '#')
 		{
-		mappi->map[y][x] = mappi->letter;
-			if (str[i + 1] == '#' && mappi->map[y][x + 1] == '.')
+			if (str[i + 1] == '#')
 			{
-				printf("PLACING right >>>>\n");
 				i++;
 				x++;
+				count++;
 			}
-			else if (str[i + 5] == '#' && mappi->map[y + 1][x] == '.')
+			else if (str[i + 5] == '#')
 			{
-				printf("PLACING down vvvv \n");
 				i +=5;
 				y++;
+				count++;
 			}
-			else if(str[i - 1] == '#' && mappi->map[y][x -1] == '.')
+			else if(str[i - 1] == '#')
 			{
-				printf("PLACING left<<<< \n");
 				i--;
 				x--;
+				count++;
 			}
-			else
-				i++;
+			mappi->map[y][x] = letter;
+			if (count == 4)
+				break ;
 		}
 	}
 }
@@ -95,8 +93,6 @@ int		check_space(char *s, char **map, t_map *mappi)
 	{
 		while (str[i] == '#')
 		{
-			print_map(mappi->map);
-			printf("we's here %d\n", i);
 			if (x < mappi->map_size && str[i + 1] == '#' && map[y][x + 1] == '.')
 			{
 				str[i] = 'X';
@@ -120,7 +116,6 @@ int		check_space(char *s, char **map, t_map *mappi)
 			}
 			else
 				i++;
-			printf("outside IF statements\n");
 			if (count == 4)
 				return(1);
 		}
@@ -137,41 +132,32 @@ int		solve(t_data *tetris, t_map *mappi)
 	i = 1;
 	j = 0;
 	counter = 0;
-	mappi->letter = 'A';
-	while (j <= tetris->len + 1)
+	while (tetris->n_tetris)
+	{
+		if (check_space(tetris->str, mappi->map, mappi) == 1)
 		{
-			printf("we're in the solve loop\n");
-			if(!(check_space(tetris->str + j, mappi->map, mappi)))
+			add_block (tetris->str, mappi, mappi->letter++);
+			tetris->str += 21;
+			tetris->n_tetris--;
+			if (solve(tetris, mappi))
+				return (1);
+			tetris->n_tetris++;
+			tetris->str -= 21;
+			add_block (tetris->str, mappi, '.');
+
+			if (next_spot(mappi) == 0 && tetris->n_tetris > 0)
 			{
-				printf("we'se here, but whatta do \n");
-				print_map(mappi->map);
-				if(!(next_spot(mappi)))
-				{
-					printf("inside of Next spot in Solve loop\n");
-					ft_strdel(mappi->map);
-					mappi->map = create_map(mappi->map_size + i++);
-					mappi->x = 0;
-					mappi->y = 0;
-					j = 0;
-					counter = 0;
-				}
-				else
-					solve(tetris, mappi);
+				return (0);
 			}
-			else
-			{
-				printf("found and placed block\n");
-				add_block(tetris->str + j, mappi);
-				print_map(mappi->map);
-				next_spot(mappi);
-				printf("is the hickup here \n");
-				j += 21;
-				mappi->letter++;
-				counter++;
-			}
-			if (counter == tetris->n_tetris)
-				break ;
 		}
-		printf("program says loop is done\n");
+		else
+		{
+				ft_strdel(mappi->map);
+				mappi->letter = 'A';
+				mappi->x = 0;
+				mappi->y = 0;
+		}
+	}
+	print_map(mappi->map);
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: bkonjuha <bkonjuha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 15:06:15 by msuarez-          #+#    #+#             */
-/*   Updated: 2019/11/15 14:56:58 by bkonjuha         ###   ########.fr       */
+/*   Updated: 2019/11/21 15:14:46 by msuarez-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ int	validate_square(t_data *tetris)
 	{
 		if (tetris->str[tetris->i] != '#' && tetris->str[tetris->i] !='.'
 		&& tetris->str[tetris->i] != '\n') //checking for other characters
+			return(-1);
+		if (tetris->i == 19 && (tetris->str[tetris->i + 1] == '.' || tetris->str[tetris->i + 1] == '#'))
 			return(-1);
 		if (tetris->str[tetris->i] == '#')
 			tetris->n_hashes++;

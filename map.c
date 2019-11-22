@@ -6,7 +6,7 @@
 /*   By: bkonjuha <bkonjuha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/15 15:11:58 by bkonjuha          #+#    #+#             */
-/*   Updated: 2019/11/21 11:21:45 by bkonjuha         ###   ########.fr       */
+/*   Updated: 2019/11/22 10:31:18 by bkonjuha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int ft_square(int num, t_map *mappi)
 	i = 0;
 	while (i * i < num)
 		i++;
-	mappi->map_size = i;
+	mappi->map_size = i + 1;
 	return (i);
 }
 
@@ -53,4 +53,18 @@ void	print_map(char **map)
 		ft_putstr(map[i]);
 		ft_putchar('\n');
 	}
+}
+
+void	reset_map(t_map *mappi, int i)
+{
+	static int num;
+
+	num = 0;
+	if (num > 0)
+		ft_strdel(mappi->map);
+	mappi->map = create_map(i);
+	mappi->y = 0;
+	mappi->x = 0;
+	mappi->letter = 'A';
+	num++;
 }

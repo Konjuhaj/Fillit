@@ -6,7 +6,7 @@
 /*   By: bkonjuha <bkonjuha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/16 10:12:09 by bkonjuha          #+#    #+#             */
-/*   Updated: 2019/11/21 15:05:19 by bkonjuha         ###   ########.fr       */
+/*   Updated: 2019/11/22 11:54:54 by bkonjuha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,15 @@
 
 int	next_spot(t_map *mappi)
 {
+	static int i;
+
+	i = 0;
+	if (i++ == 0)
+	{
+		mappi->x = 0;
+		mappi->y = 0;
+		return (1);
+	}
 	while (mappi->map[mappi->y])
 	{
 		mappi->x++;
@@ -72,7 +81,7 @@ void	add_block(char *str, t_map *mappi, char letter)
 			}
 			mappi->map[y][x] = letter;
 			if (count == 4)
-				break ;
+				return ;
 		}
 	}
 }
@@ -93,23 +102,21 @@ int		check_space(char *s, char **map, t_map *mappi)
 	{
 		while (str[i] == '#')
 		{
-			if (x < mappi->map_size && str[i + 1] == '#' && map[y][x + 1] == '.')
+			str[i] = 'X';
+			if (x < mappi->map_size - 1 && str[i + 1] == '#' && map[y][x + 1] == '.')
 			{
-				str[i] = 'X';
 				i++;
 				x++;
 				count++;
 			}
 			else if (map[y + 1] != NULL && str[i + 5] == '#' && map[y + 1][x] == '.')
 			{
-				str[i] = 'X';
 				i +=5;
 				y++;
 				count++;
 			}
-			else if(str[i - 1] == '#' && map[y][x -1] == '.')
+			else if(i > 0 && str[i - 1] == '#' && map[y][x -1] == '.')
 			{
-				str[i] = 'X';
 				i--;
 				x--;
 				count++;
@@ -134,29 +141,24 @@ int		solve(t_data *tetris, t_map *mappi)
 	counter = 0;
 	while (tetris->n_tetris)
 	{
+
 		if (check_space(tetris->str, mappi->map, mappi) == 1)
 		{
 			add_block (tetris->str, mappi, mappi->letter++);
 			tetris->str += 21;
 			tetris->n_tetris--;
+			mappi->remember[0] = mappi->y;
+			mappi->remember[1] = mappi->x;
 			if (solve(tetris, mappi))
 				return (1);
 			tetris->n_tetris++;
 			tetris->str -= 21;
+			mappi->y = mappi->remember[0];
+			mappi->x = mappi->remember[1];
 			add_block (tetris->str, mappi, '.');
-
-			if (next_spot(mappi) == 0 && tetris->n_tetris > 0)
-			{
-				return (0);
-			}
 		}
-		else
-		{
-				ft_strdel(mappi->map);
-				mappi->letter = 'A';
-				mappi->x = 0;
-				mappi->y = 0;
-		}
+		if (next_spot(mappi) == 0 && tetris->n_tetris > 0)
+			return (0);
 	}
 	print_map(mappi->map);
 	return (1);

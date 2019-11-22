@@ -6,7 +6,7 @@
 /*   By: bkonjuha <bkonjuha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/13 20:55:06 by bkonjuha          #+#    #+#             */
-/*   Updated: 2019/11/20 11:52:14 by bkonjuha         ###   ########.fr       */
+/*   Updated: 2019/11/22 10:07:11 by bkonjuha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ typedef struct s_map
 	int			map_size;
 	int			x;
 	int			y;
+	int			remember[2];
 	char		**map;
 	char		letter;
 }				t_map;
@@ -66,5 +67,8 @@ int				check_space(char *str, char **map, t_map *mappi);
 int				locate_space(t_map *mappi);
 
 int				ft_square(int num, t_map *mappi);
+
+void			reset_map(t_map *mappi, int i);
+
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   solve.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bkonjuha <bkonjuha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bkonjuha <bkonjuha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/16 10:12:09 by bkonjuha          #+#    #+#             */
-/*   Updated: 2019/11/22 11:54:54 by bkonjuha         ###   ########.fr       */
+/*   Updated: 2019/11/24 08:54:32 by bkonjuha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,6 @@
 
 int	next_spot(t_map *mappi)
 {
-	static int i;
-
-	i = 0;
-	if (i++ == 0)
-	{
-		mappi->x = 0;
-		mappi->y = 0;
-		return (1);
-	}
 	while (mappi->map[mappi->y])
 	{
 		mappi->x++;
@@ -45,17 +36,15 @@ void	find_block(char *str, int i)
 		i++;
 }
 
-void	add_block(char *str, t_map *mappi, char letter)
+void	add_block(char *s, t_map *mappi, char letter, int x, int y)
 {
 	int i;
-	int x;
-	int y;
 	int count;
+	char *str;
 
 	count = 1;
 	i = -1;
-	x = mappi->x;
-	y = mappi->y;
+	str = ft_strsub(s, 0, 20);
 	mappi->map[y][x] = letter;
 	while (++i < 20)
 	{
@@ -93,7 +82,7 @@ int		check_space(char *s, char **map, t_map *mappi)
 	int count;
 	char *str;
 
-	str= ft_strdup(s);
+	str = ft_strsub(s, 0, 20);
 	count = 1;
 	i = -1;
 	x = mappi->x;
@@ -132,33 +121,31 @@ int		check_space(char *s, char **map, t_map *mappi)
 
 int		solve(t_data *tetris, t_map *mappi)
 {
-	int i;
-	size_t counter;
-	unsigned long j;
+	int x;
+	int y;
 
-	i = 1;
-	j = 0;
-	counter = 0;
 	while (tetris->n_tetris)
 	{
-
-		if (check_space(tetris->str, mappi->map, mappi) == 1)
-		{
-			add_block (tetris->str, mappi, mappi->letter++);
-			tetris->str += 21;
-			tetris->n_tetris--;
-			mappi->remember[0] = mappi->y;
-			mappi->remember[1] = mappi->x;
-			if (solve(tetris, mappi))
-				return (1);
-			tetris->n_tetris++;
-			tetris->str -= 21;
-			mappi->y = mappi->remember[0];
-			mappi->x = mappi->remember[1];
-			add_block (tetris->str, mappi, '.');
-		}
 		if (next_spot(mappi) == 0 && tetris->n_tetris > 0)
 			return (0);
+		if (check_space(tetris->str, mappi->map, mappi) == 1)
+		{
+			x = mappi->x;
+			y = mappi->y;
+			mappi->x = 0;
+			mappi->y = 0;
+			add_block (tetris->str, mappi, mappi->letter++, x, y);
+			tetris->str += 21;
+			tetris->n_tetris--;
+			if (solve(tetris, mappi))
+				return (1);
+			mappi->x = x;
+			mappi->y = y;
+			mappi->letter--;
+			tetris->n_tetris++;
+			tetris->str -= 21;
+			add_block (tetris->str, mappi, '.', x, y);
+		}
 	}
 	print_map(mappi->map);
 	return (1);

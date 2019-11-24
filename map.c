@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bkonjuha <bkonjuha@student.42.fr>          +#+  +:+       +#+        */
+/*   By: bkonjuha <bkonjuha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/15 15:11:58 by bkonjuha          #+#    #+#             */
-/*   Updated: 2019/11/22 10:31:18 by bkonjuha         ###   ########.fr       */
+/*   Updated: 2019/11/23 21:01:56 by bkonjuha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	reset_map(t_map *mappi, int i)
 		ft_strdel(mappi->map);
 	mappi->map = create_map(i);
 	mappi->y = 0;
-	mappi->x = 0;
+	mappi->x = -1;
 	mappi->letter = 'A';
 	num++;
 }

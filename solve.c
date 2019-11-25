@@ -6,7 +6,7 @@
 /*   By: bkonjuha <bkonjuha@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/16 10:12:09 by bkonjuha          #+#    #+#             */
-/*   Updated: 2019/11/24 08:54:32 by bkonjuha         ###   ########.fr       */
+/*   Updated: 2019/11/24 10:04:54 by bkonjuha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ int		solve(t_data *tetris, t_map *mappi)
 		{
 			x = mappi->x;
 			y = mappi->y;
-			mappi->x = 0;
+			mappi->x = -1;
 			mappi->y = 0;
 			add_block (tetris->str, mappi, mappi->letter++, x, y);
 			tetris->str += 21;

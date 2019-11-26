@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   checkshapes.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bkonjuha <bkonjuha@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: bkonjuha <bkonjuha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/14 15:06:15 by msuarez-          #+#    #+#             */
-/*   Updated: 2019/11/23 21:00:24 by bkonjuha         ###   ########.fr       */
+/*   Updated: 2019/11/26 10:38:12 by bkonjuha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
-#include <stdio.h>//For testing only
 
 int	check_shapes(char *str, t_data *tetris)
 {
@@ -23,13 +22,13 @@ int	check_shapes(char *str, t_data *tetris)
 	{
 		if (str[tetris->i] == '#')
 		{
-			if (tetris->i > 0 && str[tetris->i - 1] == '#')//check left
+			if (tetris->i > 0 && str[tetris->i - 1] == '#')
 				count++;
-			if (tetris->i > 4 && str[tetris->i - 5] == '#')//check above
+			if (tetris->i > 4 && str[tetris->i - 5] == '#')
 				count++;
-			if (tetris->i < 21 && str[tetris->i + 1] == '#')//check right
+			if (tetris->i < 21 && str[tetris->i + 1] == '#')
 				count++;
-			if (tetris->i < 21 -4 && str[tetris->i + 5] == '#')//check below
+			if (tetris->i < 14 && str[tetris->i + 5] == '#')
 				count++;
 		}
 	}
@@ -51,9 +50,34 @@ int	check_shapes(char *str, t_data *tetris)
 **
 ** a line has 5 characters including the new line
 ** a box has 20 characters including a new line
-** boxes are separated by a new line. Thus a valid box is 21 characters (3 x 4 x '.', 4 x '#', 4 x '\n' + separator)
-** The above formula is always true except for the last box. That is why we add + 1 in the if statement outside the loop
+** boxes are separated by a new line. Thus a valid box is 21
+**characters (3 x 4 x '.', 4 x '#', 4 x '\n' + separator)
+** The above formula is always true except for the last box.
+**That is why we add + 1 in the if statement outside the loop
 */
+
+int	error_check(t_data *tetris, size_t limit, int num)
+{
+	if (num == 1)
+	{
+		if ((tetris->str[tetris->i] != '#' &&
+			tetris->str[tetris->i] != '.' &&
+			tetris->str[tetris->i] != '\n')
+			|| (tetris->i == limit &&
+			(tetris->str[tetris->i + 1] == '.' ||
+			tetris->str[tetris->i + 1] == '#')))
+			return (-1);
+	}
+	else if (num == 2)
+	{
+		if (tetris->n_tetris != ((tetris->len + 1) / 21)
+			|| ((tetris->len + 1) % 21) != 0 ||
+			tetris->n_hashes % 4 != 0 ||
+			tetris->n_hashes / 4 != tetris->n_tetris)
+			return (-1);
+	}
+	return (0);
+}
 
 int	validate_square(t_data *tetris)
 {
@@ -61,18 +85,16 @@ int	validate_square(t_data *tetris)
 
 	tetris->n_hashes = 0;
 	tetris->n_tetris = 0;
-	tetris->i = - 1;
+	tetris->i = -1;
 	limit = 19;
 	while (tetris->str[++tetris->i] != '\0')
 	{
-		if (tetris->str[tetris->i] != '#' && tetris->str[tetris->i] !='.'
-		&& tetris->str[tetris->i] != '\n') //checking for other characters
-			return(-1);
-		if (tetris->i == 19 && (tetris->str[tetris->i + 1] == '.' || tetris->str[tetris->i + 1] == '#'))
-			return(-1);
+		if (error_check(tetris, limit, 1) == -1)
+			return (-1);
 		if (tetris->str[tetris->i] == '#')
 			tetris->n_hashes++;
-		if (tetris->i == limit  && tetris->str[tetris->i] == '\n' && tetris->n_hashes % 4 == 0) //boxes are 20 characters long meaning at index 19 should be a /n and there should have been 4x '#'
+		if (tetris->i == limit && tetris->str[tetris->i] == '\n' &&
+			tetris->n_hashes % 4 == 0)
 		{
 			tetris->n_tetris++;
 			limit += 21;
@@ -80,8 +102,7 @@ int	validate_square(t_data *tetris)
 				tetris->i++;
 		}
 	}
-	if (tetris->n_tetris != ((tetris->len + 1) / 21) || ((tetris->len + 1) % 21) != 0 ||
-	tetris->n_hashes % 4 != 0 || tetris->n_hashes / 4 != tetris->n_tetris) //for every tetrinome there should be 21 characters (except the last one) len + 1 should also be either 21, 42, 63.. and so on.
+	if (error_check(tetris, limit, 2) == -1)
 		return (-1);
 	return (0);
 }

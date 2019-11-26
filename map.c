@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bkonjuha <bkonjuha@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: bkonjuha <bkonjuha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/15 15:11:58 by bkonjuha          #+#    #+#             */
-/*   Updated: 2019/11/23 21:01:56 by bkonjuha         ###   ########.fr       */
+/*   Updated: 2019/11/26 10:08:33 by bkonjuha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
-#include <stdio.h>//Only for testing
 
-int ft_square(int num, t_map *mappi)
+int		ft_square(int num, t_map *mappi)
 {
 	int i;
 
@@ -26,8 +25,8 @@ int ft_square(int num, t_map *mappi)
 
 char	**create_map(int size)
 {
-	char **mappi;
-	int i;
+	char	**mappi;
+	int		i;
 
 	i = -1;
 	mappi = (char **)malloc(sizeof(char *) * (size + 1));
@@ -38,7 +37,7 @@ char	**create_map(int size)
 	}
 	mappi[size] = NULL;
 	i = -1;
-	while(mappi[++i])
+	while (mappi[++i])
 		ft_memset(mappi[i], '.', size);
 	return (mappi);
 }

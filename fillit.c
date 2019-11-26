@@ -6,17 +6,17 @@
 /*   By: bkonjuha <bkonjuha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/13 20:56:54 by bkonjuha          #+#    #+#             */
-/*   Updated: 2019/11/22 10:07:15 by bkonjuha         ###   ########.fr       */
+/*   Updated: 2019/11/26 12:27:16 by msuarez-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
-#include <stdio.h> //only used for testting
 
 /*
 ** FUNCTION ERRNO
 ** Can be used to print out error messages at any point of the program.
-** Easiest way to call it is to put it in a return statement. I.e return(errno(1));
+** Easiest way to call it is to put it in a
+**return statement. I.e return(errno(1));
 */
 
 int		errno(void)
@@ -27,13 +27,13 @@ int		errno(void)
 
 char	*please_read(int fd)
 {
-	char buff[BUFF_SIZE + 1];
-	char *temp;
-	char *str;
-	int ret;
+	char	buff[BUFF_SIZE + 1];
+	char	*temp;
+	char	*str;
+	int		ret;
 
 	str = ft_strnew(1);
-	while ((ret = read(fd, buff, BUFF_SIZE))) // same while loop as in gnl
+	while ((ret = read(fd, buff, BUFF_SIZE)))
 	{
 		buff[ret] = '\0';
 		if (!str)
@@ -48,12 +48,20 @@ char	*please_read(int fd)
 	return (str);
 }
 
+void	start_solving(t_data *tetris, t_map *mappi)
+{
+	reset_map(mappi, ft_square(tetris->n_hashes, mappi));
+	while (!(solve(tetris, mappi)))
+		reset_map(mappi, mappi->map_size++);
+	print_map(mappi->map);
+}
+
 int		main(int ac, char **av)
 {
-	size_t mover;
-	t_data tetris;
-	int fd;
-	t_map mappi;
+	size_t	mover;
+	t_data	tetris;
+	int		fd;
+	t_map	mappi;
 
 	if (ac != 2)
 		write(1, "usage: ./fillit file_name\n", 26);
@@ -63,20 +71,14 @@ int		main(int ac, char **av)
 		tetris.str = please_read(fd);
 		tetris.len = ft_strlen(tetris.str);
 		mover = 0;
-		if ((validate_square(&tetris) == 0))
+		while (mover <= tetris.len)
 		{
-			while (mover <= tetris.len)
-			{
-				if ((check_shapes(tetris.str + mover, &tetris) != 0))
-					return (errno());
-				mover += 21;
-			}
-			reset_map(&mappi, ft_square(tetris.n_hashes, &mappi));
-			while (!(solve(&tetris, &mappi)))
-				reset_map(&mappi, mappi.map_size++);
+			if (check_shapes(tetris.str + mover, &tetris) != 0 ||
+					validate_square(&tetris) != 0)
+				return (errno());
+			mover += 21;
 		}
-		else
-			return (errno());
+		start_solving(&tetris, &mappi);
 	}
 	return (0);
 }

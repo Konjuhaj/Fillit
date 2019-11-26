@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fillit.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bkonjuha <bkonjuha@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: bkonjuha <bkonjuha@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/13 20:55:06 by bkonjuha          #+#    #+#             */
-/*   Updated: 2019/11/23 21:02:01 by bkonjuha         ###   ########.fr       */
+/*   Updated: 2019/11/26 10:25:15 by bkonjuha         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ typedef struct	s_data
 	char		*str;
 }				t_data;
 
-typedef struct s_map
+typedef struct	s_map
 {
 	int			map_size;
 	int			x;
@@ -34,19 +34,6 @@ typedef struct s_map
 	char		**map;
 	char		letter;
 }				t_map;
-
-typedef struct s_coords
-{
-	int 		x;
-	int 		y;
-}				t_coords;
-
-typedef struct s_tetrinome
-{
-	char		letter;
-	t_coords	coords[4];
-
-}				t_tetrinome;
 
 int				check_shapes(char *str, t_data *tetris);
 
@@ -62,7 +49,7 @@ char			**create_map(int size);
 
 int				solve(t_data *tetris, t_map *mappi);
 
-int				check_space(char *str, char **map, t_map *mappi);
+int				check_space(t_data *tetris, t_map *mappi);
 
 int				locate_space(t_map *mappi);
 
@@ -70,5 +57,6 @@ int				ft_square(int num, t_map *mappi);
 
 void			reset_map(t_map *mappi, int i);
 
+int				check_hard(t_map *mappi, t_data *tetris);
 
 #endif

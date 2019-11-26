@@ -6,7 +6,7 @@
 #    By: bkonjuha <bkonjuha@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/16 08:09:19 by bkonjuha          #+#    #+#              #
-#    Updated: 2019/10/30 19:18:09 by bkonjuha         ###   ########.fr        #
+#    Updated: 2019/11/18 18:22:51 by msuarez-         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,14 +17,14 @@ OBJS=$(subst .c,.o,$(SRCS))
 all: $(NAME)
 
 $(NAME):
-	gcc -Wall -Werror -Wextra -c $(SRCS)
-	ar rc $(NAME) $(OBJS)
-	ranlib $(NAME)
+	@gcc -Wall -Werror -Wextra -c $(SRCS)
+	@ar rc $(NAME) $(OBJS)
+	@ranlib $(NAME)
 
 clean:
-	/bin/rm -f $(OBJS)
+	@/bin/rm -f $(OBJS)
 
 fclean: clean
-	/bin/rm -f $(NAME)
+	@/bin/rm -f $(NAME)
 
 re: fclean all
